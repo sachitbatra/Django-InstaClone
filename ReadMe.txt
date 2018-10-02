@@ -1,9 +1,11 @@
-Objective 1: 
+An application that allows users to upload images (along the lines of Instagram Web-App) which allows users to add likes and comments and the posts are "tagged" automatically based on the objects in the image.
 
-1. We need a way to add these categories in the database first.
+Objective: 
+
+1. We need a way to add these categories in the database:
 For that, I have added a CategoryModel with Post as a foreign key.
 
-2. CategoryModel objects will be created at the time of adding the post. We have created "add_category" function which passes the post object being added as an argument.
+2. CategoryModel objects will be created at the time of adding the post. I have created "add_category" function which passes the post object being added as an argument.
 
 3. add-category function calls the API functions and creates a new CategoryModel object for each category tag received from the API function call.
 
