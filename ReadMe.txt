@@ -1,4 +1,4 @@
-An application that allows users to upload images (along the lines of Instagram Web-App) which allows users to add likes and comments and the posts are "tagged" automatically based on the objects in the image.
+An application that allows users to upload images (along the lines of Instagram Web-App) and add likes & comments. The posts are "tagged" automatically based on the objects in the image.
 
 Objective: 
 
