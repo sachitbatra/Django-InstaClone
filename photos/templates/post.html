@@ -1,0 +1,25 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Image</title>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div>
+            <label for="image">Image: </label>
+            <input id="image" type="file" name="image" accept="image/*" value={{ image }}>
+        </div>
+        <div>
+            <label for="caption">Caption: </label>
+            <input id="caption" type="text" name="caption" value={{ caption }}>
+        </div>
+
+        <input type="submit" class="btn btn-default" value="Post">
+    </form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Sharing App</title>
+</head>
+<body>
+
+{% if messages %}
+    {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% for user in users %}
+
+    <h3><a href="/photos/{{ user.email_address }}"> {{ user.name }} </a></h3>
+    <br>
+
+{% endfor %}
+</body>
+</html>

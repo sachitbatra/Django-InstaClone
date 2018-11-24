@@ -1,0 +1,9 @@
+Instagram/API_KEYS
+Instagram/__pycache__/
+authentication/__pycache__/
+authentication/migrations/
+chat/__pycache__/
+chat/migrations/
+media/*
+photos/__pycache__/
+photos/migrations/

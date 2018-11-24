@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title> Login </title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Bootstrap CSS File -->
+    <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <!-- Libraries CSS Files -->
+    <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/static/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="/static/css/loginStyles.css">
+</head>
+
+<body style="background-image: url('/static/img/login_background.jpg')">
+
+
+<div class="container">
+    <div class="header-content">
+        <header id="header">
+            <div class="container-fluid">
+                <div id="logo" class="pull-left">
+                    <h1><a href="#intro" class="scrollto">Photo Sharing App</a></h1>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3>Log In </h3>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group form-group">
+                    <input id="email" type="text" class="form-control" placeholder="email id" name="email_address">
+                </div>
+                <div class="input-group form-group">
+
+                    <input id="password" class="form-control" placeholder="password" type="password" name="password">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn float-center login_btn">
+                </div>
+            </form>
+            <div class="card-footer">
+                <div class="d-flex justified-content-center links">
+                    Don't have an account? <a href="/register">Sign Up</a>
+                </div>
+                <br>
+                <br>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <div class="text-danger">
+                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<p>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

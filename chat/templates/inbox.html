@@ -1,0 +1,8 @@
+<h1>Chats</h1>
+<ul>
+    {% for thread in thread_list %}
+        <li>{% if curUser != thread.first.email_address %}
+            <a href="/chat/{{ thread.first.email_address }}/">{{ thread.first }}</a>{% else %}
+            <a href="/chat/{{ thread.second.email_address }}/">{{ thread.second }}</a>{% endif %}</li>
+    {% endfor %}
+</ul>

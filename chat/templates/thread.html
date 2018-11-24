@@ -1,0 +1,83 @@
+{% block content %}
+    <h3>Talking to
+        {% if curUser != object.first.email_address %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+    <ul id='chat-items'>
+        {% for chat in object.chatmessage_set.all %}
+            {% if curUser == chat.user.email_address %}
+
+                <div class="container">
+                    <p>{{ chat.message }} </p>
+                    <span class="time-right text-body">{{ chat.user }}</span>
+                </div>
+
+            {% else %}
+
+                <div class="container darker">
+                    <p>{{ chat.message }}</p>
+                    <span class="time-left text-body">{{ chat.user }}</span>
+                </div>
+
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <form id='form' method='POST'> {% csrf_token %}
+        {{ form.as_p }}
+        <input type='submit' class='btn btn-primary'/>
+    </form>
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+        $('html,body').animate({scrollTop: document.body.scrollHeight}, "fast");
+
+        var curUser = "{{curUser}}";
+        var wsStart = "ws://" + window.location.host + window.location.pathname;
+        var socket = new ReconnectingWebSocket(wsStart);
+
+        var formData = $("#form");
+        var msgInput = $("#id_message");
+        var chatHolder = $("#chat-items");
+
+        socket.onmessage = function (e) {
+            console.log("message", e);
+            var chatDataMsg = JSON.parse(e.data);
+            if (curUser == chatDataMsg.email_address) {
+                chatHolder.append('<div class="container"> <p>' + chatDataMsg.message + '</p> <span class="time-right text-body">' + chatDataMsg.username + '</span> </div>')
+            }
+            else {
+                chatHolder.append('<div class="container darker"> <p>' + chatDataMsg.message + '</p> <span class="time-left text-body">' + chatDataMsg.username + '</span> </div>')
+
+            }
+            $('html,body').animate({scrollTop: document.body.scrollHeight}, "fast");
+        };
+
+        socket.onopen = function (e) {
+            console.log("Open", e);
+            formData.submit(function (event) {
+                event.preventDefault();
+                var msgText = msgInput.val();
+
+                var finalData = {
+                    'message': msgText
+                };
+
+                socket.send(JSON.stringify(finalData));
+                msgInput.val('');
+            })
+        };
+
+        socket.onerror = function (e) {
+            console.log("message", e)
+        };
+
+        socket.onclose = function (e) {
+            console.log("message", e)
+        };
+    </script>
+{% endblock %}
