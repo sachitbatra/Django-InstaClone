@@ -4,7 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Photo Sharing App</title>
+    <title>Feed</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 
@@ -14,56 +22,74 @@
     {% endfor %}
 {% endif %}
 
+<div class="main">
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="text-center">
+                Feed
+            </h1>
+        </div>
+    </div>
+</div>
+
 {% for post in posts %}
 
-    <h3><a href="/photos/{{ post.user.email_address }}"> {{ post.user.name }} </a></h3>
-    <p>[{{ post.created_on }}]</p>
-    <img style="display:inline-block; width:350px; height:300px;"
-         src="{{ post.image.url }}"/><br>
-    <span style="display:inline-block;">{{ post.caption }}</span><br/><br/>
+    <div class="container">
+        <h3 class="text-danger"><a href="/photos/{{ post.user.email_address }}"> {{ post.user.name }} </a></h3>
 
-    <div style="display:inline-block">
-        {% if post.like_count == 1 %}
-            <a href="/photos/likes/{{ post.id }}"> {{ post.like_count }} </a> likes this
-        {% elif post.like_count > 1 %}
-            <a href="/photos/likes/{{ post.id }}"> {{ post.like_count }} </a> like this
-        {% endif %}
-    </div>
+        <img class='img-rounded' style="display:inline-block; width:350px; height:300px;"
+             src="{{ post.image.url }}"/><br>
+        <span style="display:inline-block;"><h5 class="text-info"> <a
+                href="/photos/{{ post.user.email_address }}"> {{ post.user.name }} </a> : {{ post.caption }} </h5></span>
 
-    <div style="display:inline-block">
-        <form method="POST" action="/photos/like">
-            {% csrf_token %}
-            <input type="hidden" name="post" value="{{ post.id }}"/>
-            {% if post.has_liked %}
-                <input type="submit" class="btn btn-default" value="Unlike">
-            {% else %}
-                <input type="submit" class="btn btn-default" value="Like">
-            {% endif %}
-        </form>
-    </div>
+        <p class='text-success'>Likes : <a href="/photos/likes/{{ post.id }}"> {{ post.like_count }} </a></p>
 
-    <div>
-        <p> Tags: </p>
-        {% for category in post.categories %}
-            <span> <a href="/photos/tag/{{ category.category_text }}"> {{ category.category_text }} </a> </span>
-        {% endfor %}
-    </div>
+        <p class='text-success'> Posted on : [{{ post.created_on }}]</p>
 
-    <div>
-        <form method="POST" action="/photos/comment">
-            {% csrf_token %}
-            <input type="hidden" name="post" value="{{ post.id }}"/>
-            <input type="text" name="comment_text" id="comment_text" placeholder="Make a comment.."
-                   value="{{ comment_text }}">
-            {{ comment_text }}
-            <input type="submit" class="btn-default btn" value="Comment">
-        </form>
-    </div>
+        <div>
+          <span>
+            <p class='text-success'> Categories </p>
+              {% for category in post.categories %}
+                  <span><code><a
+                          href="/photos/tag/{{ category.category_text }}"> {{ category.category_text }} </a></code></span>
+              {% endfor %}
+          </span>
 
-    <div>
-        {% for comment in post.comments %}
-            <p><b><a href="/photos/{{ post.user.email_address }}">{{ comment.user.name }}</a> [{{ comment.created_on }}]:</b> {{ comment.comment_text }}</p>
-        {% endfor %}
+        </div>
+
+        <br>
+
+        <div style="display:inline-block" class="form-group">
+            <form method="POST" action="/photos/like">
+                {% csrf_token %}
+                <input type="hidden" name="post" value="{{ post.id }}"/>
+                {% if post.has_liked %}
+                    <input type="submit" class="btn btn-default" value="Unlike">
+                {% else %}
+                    <input type="submit" class="btn btn-default" value="Like">
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="form-group">
+            <form method="POST" action="/photos/comment">
+                {% csrf_token %}
+                <input class="btn-primary btn" type="hidden" name="post" value="{{ post.id }}"/>
+                <input type="text" class="form-control" name="comment_text" id="comment_text"
+                       placeholder="Make a comment." value="{{ comment_text }}">
+                {{ comment_text }}
+                <br>
+                <input type="submit" class="btn-primary btn" value="Comment">
+            </form>
+        </div>
+
+        <div>
+            {% for comment in post.comments %}
+                <p><b><a href="/photos/{{ post.user.email_address }}">{{ comment.user.name }}</a>
+                    [{{ comment.created_on }}]:</b> {{ comment.comment_text }}</p>
+            {% endfor %}
+        </div>
     </div>
 
 {% endfor %}

@@ -1,91 +1,246 @@
-<html>
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title> Register </title>
+    <meta charset="UTF-8">
+    <title>Instagram Clone</title>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        var TxtType = function (el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
 
-    <!--Bootsrap 4 CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- Bootstrap CSS File -->
-    <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        TxtType.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) {
+                delta /= 2;
+            }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function () {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+            // INJECT CSS
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+            document.body.appendChild(css);
+        };
+    </script>
+    <style>
+
+        body {
+            font: 400 15px Lato, sans-serif;
+            line-height: 1.8;
+            color: #818181;
+        }
+
+        h2 {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: #303030;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        h4 {
+            font-size: 19px;
+            line-height: 1.375em;
+            color: #303030;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+
+        /* Full-width input fields */
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus, input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        button:hover {
+            opacity: 1;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            padding: 14px 20px;
+            background-color: #f44336;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+        .cancelbtn, .signupbtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Add padding to container elements */
+        .container {
+            padding: 16px;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Change styles for cancel button and signup button on extra small screens */
+        @media screen and (max-width: 300px) {
+            .cancelbtn, .signupbtn {
+                width: 100%;
+            }
+        }
+
+
+    </style>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <!-- Libraries CSS Files -->
-    <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
-    <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-    <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="/static/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
-    <!--Fontawesome CDN-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-    <!--Custom styles-->
-    <link rel="stylesheet" type="text/css" href="/static/css/loginStyles.css?1">
 </head>
 
-<body style="background-image: url('/static/img/signupbg.jpg')">
-
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
 
 <div class="container">
-    <div class="header-content">
-        <header id="header">
-            <div class="container-fluid">
-                <div id="logo" class="pull-left">
-                    <h1><a href="#intro" class="scrollto">Photo Sharing App</a></h1>
-                </div>
-            </div>
-        </header>
+    <div class="page-header">
+        <h1 class="text-center">
+            Instagram
+        </h1>
     </div>
-    <div class="d-flex justify-content-center h-100">
-        <div class="card">
-            <div class="card-header">
-                <h3>Register </h3>
-            </div>
-            <div class="card-body">
+</div>
 
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="input-group form-group">
-                        <input id="name" type="text" class="form-control" placeholder="Name" name="name">
-                    </div>
-                    <div class="input-group form-group">
-                        <input id="email" type="text" class="form-control" placeholder="email id" name="email_address">
-                    </div>
-                    <div class="input-group form-group">
-                        <input id="password" class="form-control" placeholder="password" type="password"
-                               name="password">
-                    </div>
-                    <div class="input-group form-group">
-                        <label for="dateOfBirth">Date of Birth: </label>
-                        <input id="dateOfBirth" class="form-control" type="date" name="dateOfBirth">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Register" class="btn float-center login_btn">
-                    </div>
-                </form>
+<div class="container">
+    <h1 class="text-center">
+        <a href="" class="typewrite" data-period="2000"
+           data-type='[ "Hi, Welcome to Instagram.", "Browse.", "Share.", "Enjoy." ]'>
+            <span class="wrap"></span>
+        </a>
+    </h1>
+</div>
 
-                <div class="card-footer">
-                    <!-- <div class="d-flex justified-content-center links">
-                        Don't have an account?<a href="signUpPatient.html">Sign Up</a>
-                    </div> -->
-                    {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <div class="text-danger">
-                                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<p>
-                                </div>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <div class="text-danger">
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<p>
             </div>
-        </div>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="container">
+    <div class="main">
+        <h3 class="text-center"><kbd>New to Instagram?</kbd></h3>
     </div>
+
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+
+            <div>
+                <label for="name">Name: </label>
+                <input id="name" class="form-control" type="text" name="name">
+            </div>
+
+            <div>
+                <label for="email_address">Email: </label>
+                <input id="email_address" class="form-control" type="text" name="email_address">
+            </div>
+
+            <div>
+                <label for="password">Password: </label>
+                <input id="password" class="form-control" type="password" name="password">
+            </div>
+
+            <div>
+                <label for="dateOfBirth">Date of Birth: </label>
+                <input id="dateOfBirth" class="form-control" type="date" name="dateOfBirth">
+            </div>
+
+            <br>
+            <input type="submit" class="btn btn-success btn-block" value="Sign Up">
+        </form>
+
+
+    </div>
+    <br><br>
+
+    <div><h3 class="text-center"><kbd>Already a user?</kbd></h3>
+        <br>
+        <a href="/" class="btn btn-success align-middle btn-block">Login</a></div>
+</div>
 </body>
 </html>
+
 
